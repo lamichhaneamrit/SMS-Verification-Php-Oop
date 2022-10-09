@@ -7,7 +7,7 @@ Making a sms verification with email registration using oop Php
 ### Validation setting form
 ### redirect Login
 ### url prettier (for now settings)
-# other validation for setting forms
+### other validation for setting forms
 ## Remaining #
 ### Registration form
 ### Email Verification
