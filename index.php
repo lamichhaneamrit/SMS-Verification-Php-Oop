@@ -1,4 +1,32 @@
 <?php
+include("core/init.php");
+//$user = $userObj->get('users', array('user_id' => 1));
+//Validation login E-mail 
+if (isset($_POST['login'])) {
+    $email = Validate::escape($_POST['email']);
+    $password = Validate::escape($_POST['password']);
+
+    if (empty($email) or empty($password)) {
+        $error = "Enter your Email and Password";
+    } else {
+        if (!Validate::filterEmail($email)) {
+            $error = "Invalid Email";
+        } else {
+            //hashing  password 
+            if ($user = $userObj->emailExist($email)) {
+                $hash = $user->password;
+                //echo $userObj->hash($hash);
+                if (password_verify($password, $hash)) {
+                    //for login
+                    $_SESSION['user_id'] = $user->user_id;
+                    $userObj->redirect('home.php');
+                }
+            } else {
+                $error = "No Account with this Email exist";
+            }
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -30,7 +58,9 @@
                                 <input type="password" name="password" placeholder="Password">
                                 <button type="submit" name="login">Login</button>
                             </div>
-                            <div class="error shake-horizontal">Errors shows here</div>
+                            <?php if (isset($error)) : ?>
+                            <div class="error shake-horizontal"><?php echo $error; ?></div>
+                            <?php endif; ?>
                     </form>
                 </div>
             </div>
