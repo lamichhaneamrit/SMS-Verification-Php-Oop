@@ -98,4 +98,22 @@ class Users
             $stmt->execute();
         }
     }
+    public  function insert($table, $fields = array())
+    {
+        $columns = implode(",", array_keys($fields));
+        $values = ":" . implode(",:", array_keys($fields));
+        //sql query
+        //insert the columns into tables with the key values 
+        $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$values})";
+        //check if sql is prepared 
+        if ($stmt = $this->db->prepare($sql)) {
+            //bind values to placeholdes
+            foreach ($fields as $key => $value) {
+                $stmt->bindValue(":{$key}", $value);
+            }
+            //execute the insert function
+            $stmt->execute();
+            return $this->db->lastInsertID();
+        }
+    }
 }
